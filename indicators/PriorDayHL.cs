@@ -11,7 +11,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 		private double currentLow = double.MinValue;
 		private double priorDayHigh = double.MinValue;
 		private double priorDayLow = double.MinValue;
-
+		private bool skipFirst = true;
 		private Data.SessionIterator sessionIterator;
 
 		protected override void OnStateChange()
@@ -41,6 +41,7 @@ namespace NinjaTrader.NinjaScript.Indicators
 				priorDayHigh = double.MinValue;
 				priorDayLow = double.MinValue;
 				sessionIterator = null;
+				skipFirst = true;
 			}
 			else if (State == State.DataLoaded)
 			{
@@ -78,13 +79,19 @@ namespace NinjaTrader.NinjaScript.Indicators
 				currentLow = Low[0];
 				previousDate = currentDate;
 				currentDate = sessionIterator.GetTradingDay(Time[0]);
+				skipFirst = true;
+
 			}
 			else // The current day is the same day
 			{
 				// Set the current day HL values
 				currentHigh = Math.Max(currentHigh, High[0]);
 				currentLow = Math.Min(currentLow, Low[0]);
-
+				if (skipFirst)
+				{
+					skipFirst = false;
+					return;
+				}
 				if (ShowHigh)
 				{
 					string prevDayHighId = "high_" + previousDate.Date.ToString("yyyyMMdd");
