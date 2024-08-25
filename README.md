@@ -1,6 +1,6 @@
 # NinjaTraderScripts
 
-Repository with scripts created by me, to help my intraday trading. 
+Repository with scripts created by me, to help my intraday trading.
 
 These scripts were created and tested for **NinjaTrader 8**. The scripts will be divided according to their NT subcategory (i.e: indicator, drawing tool, etc).
 
@@ -17,44 +17,50 @@ All the elements, if they require time context, consider NewYork timezone as the
 ### Indicators
 
 1. [Open prices](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/OpenPrices.cs)
-    - Draws a **dashed** dark-gray line from NY midnight open (12 AM)
-    - Draws a **solid** dark-gray line from NY pre-market open (8:30 AM)
-    - Allows to:
-        - Toggle each draw
-        - Show prior days (default off, to ease hardware)
+   - Draws a **dashed** dark-gray line from NY midnight open (12 AM)
+   - Draws a **solid** dark-gray line from NY pre-market open (8:30 AM)
+   - Allows to:
+     - Toggle each draw
+     - Show prior days (default off, to ease hardware)
 2. [Prior day H/L](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/PriorDayHL.cs)
-    - Draws a **dashed** pink line for prior day **High** 
-    - Draws a **solid** pink line for prior day **Low**
-    - Allows to:
-        - Show text alongside High/Low line (i.e: Mon H/Mon L)
-        - Change plot settings
-        - Toggle which to show
+   - Draws a **dashed** pink line for prior day **High**
+   - Draws a **solid** pink line for prior day **Low**
+   - Allows to:
+     - Show text alongside High/Low line (i.e: Mon H/Mon L)
+     - Change plot settings
+     - Toggle which to show
 3. [Sessions H/L](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/SessionsHL.cs)
-    - Draws a **dashed** line for **Highs**
-    - Draws a **solid** line for **Lows**
-    - Sessions hardcoded coloring:
-        - Asia: Yellow
-        - London: Blue
-        - NewYork: Green (high)/Crimsom (low) 
-    - Allows to:
-        - Defining sessions hours (Defaults: Asia 6:30PM - 3:30AM ; London: 03:30-9:30AM ; NewYork: 9:30AM-4PM)
-        - Toggle which sessions
-        - Show prior days (default off, to ease hardware)
-        - Show text alongside Highs/Lows 
+   - Draws a **dashed** line for **Highs**
+   - Draws a **solid** line for **Lows**
+   - Sessions hardcoded coloring:
+     - Asia: Yellow
+     - London: Blue
+     - NewYork: Green (high)/Crimsom (low)
+   - Allows to:
+     - Defining sessions hours (Defaults: Asia 6:30PM - 3:30AM ; London: 03:30-9:30AM ; NewYork: 9:30AM-4PM)
+     - Toggle which sessions
+     - Show prior days (default off, to ease hardware)
+     - Show text alongside Highs/Lows
 4. [Time macros](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/TimeMacros.cs)
-    - Draws vertical dashed lines at different times
-    - Times available (NY time)
-        - 12AM
-        - 8:30AM
-        - 9:30AM
-        - 9:50 - 10:10AM
-        - 10:50 - 11:10AM
-        - 12AM - 1PM
-        - 3PM  - 4PM
-    - Allows to:
-        - Toggle each time
-        - Disable all (without unticking desired, for backtesting easiness)
-        - Show prior days (default off, to ease hardware)
+   - Draws vertical dashed lines at different times
+   - Times available (NY time)
+     - 12AM
+     - 8:30AM
+     - 9:30AM
+     - 9:50 - 10:10AM
+     - 10:50 - 11:10AM
+     - 12AM - 1PM
+     - 3PM - 4PM
+   - Allows to:
+     - Toggle each time
+     - Disable all (without unticking desired, for backtesting easiness)
+     - Show prior days (default off, to ease hardware)
+5. [Bar Timer and Clock](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/BarTimerAndClock.cs)
+   - Simply adds clock below the already existing BarTimer indicator
+   - Allows to:
+     - Toggle BarTimer
+     - Toggle Clock
+     - Toggle Clock seconds
 
 ### Maybe next
 
