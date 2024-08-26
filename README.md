@@ -32,9 +32,9 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Show text alongside High/Low line (i.e: Mon H/Mon L)
      - Change plot settings
      - Toggle which to show
-     - Screenshot
-       <br>
-       <img src="./screenshots/priorDayHL.png" style="width:400px">
+   - Screenshot
+     <br>
+     <img src="./screenshots/priorDayHL.png" style="width:400px">
 3. [Sessions H/L](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/SessionsHL.cs)
    - Draws a **dashed** line for **Highs**
    - Draws a **solid** line for **Lows**
