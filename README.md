@@ -22,6 +22,9 @@ All the elements, if they require time context, consider NewYork timezone as the
    - Allows to:
      - Toggle each draw
      - Show prior days (default off, to ease hardware)
+   - Screenshot
+     <br>
+     <img src="./screenshots/openPrices.png" style="width:400px">
 2. [Prior day H/L](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/PriorDayHL.cs)
    - Draws a **dashed** pink line for prior day **High**
    - Draws a **solid** pink line for prior day **Low**
@@ -29,6 +32,9 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Show text alongside High/Low line (i.e: Mon H/Mon L)
      - Change plot settings
      - Toggle which to show
+     - Screenshot
+       <br>
+       <img src="./screenshots/priorDayHL.png" style="width:400px">
 3. [Sessions H/L](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/SessionsHL.cs)
    - Draws a **dashed** line for **Highs**
    - Draws a **solid** line for **Lows**
@@ -41,6 +47,9 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Toggle which sessions
      - Show prior days (default off, to ease hardware)
      - Show text alongside Highs/Lows
+   - Screenshot
+     <br>
+     <img src="./screenshots/sessionsHL.png" style="width:400px">
 4. [Time macros](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/TimeMacros.cs)
    - Draws vertical dashed lines at different times
    - Times available (NY time)
@@ -55,12 +64,18 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Toggle each time
      - Disable all (without unticking desired, for backtesting easiness)
      - Show prior days (default off, to ease hardware)
+   - Screenshot
+     <br>
+     <img src="./screenshots/timeMacros.png" style="width:400px">
 5. [Bar Timer and Clock](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/indicators/BarTimerAndClock.cs)
    - Simply adds clock below the already existing BarTimer indicator
    - Allows to:
      - Toggle BarTimer
      - Toggle Clock
      - Toggle Clock seconds
+   - Screenshot
+     <br>
+     <img src="./screenshots/barTimerAndClock.png" style="width:400px">
 
 ### Drawing tools
 
@@ -73,6 +88,9 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Toggle cost calculation
      - Toggle points made calculation
      - Change Entry, SL and TP settings
+   - Screenshot
+     <br>
+     <img src="./screenshots/tradePlacer.png" style="width:400px">
 
 ### Maybe next
 
