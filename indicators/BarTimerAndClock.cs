@@ -34,7 +34,7 @@ namespace NinjaTrader.NinjaScript.Indicators
     public class BarTimerAndClock : Indicator
     {
         private string errMsg = "BarTimeAndClock: Unable to process. (connection/data/time error?!)";
-
+        TimeZoneInfo ninjaTraderTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
         private DateTime now = Core.Globals.Now;
         private bool connected,
                                 hasRealtimeData;
@@ -140,8 +140,8 @@ namespace NinjaTrader.NinjaScript.Indicators
                             string outputString = "";
                             if (ShowClock)
                             {
-                                if (ShowClockSeconds) outputString = string.Format("Clock: {0}", DateTime.Now.ToString("HH:mm:ss"));
-                                else outputString = string.Format("Clock: {0}", DateTime.Now.ToString("HH:mm"));
+                                if (ShowClockSeconds) outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm:ss"));
+                                else outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm:ss"));
                             }
                             if (ShowBarTimer)
                             {
