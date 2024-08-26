@@ -140,24 +140,15 @@ namespace NinjaTrader.NinjaScript.Indicators
                             string outputString = "";
                             if (ShowClock)
                             {
-                                if (ShowClockSeconds)
-                                {
-                                    outputString = string.Format("Clock: ", outputString, DateTime.Now.ToString("HH:mm:ss"));
-                                }
-                                else
-                                {
-                                    outputString = string.Format("Clock: ", outputString, DateTime.Now.ToString("HH:mm"));
-                                }
+                                if (ShowClockSeconds) outputString = string.Format("Clock: {0}", DateTime.Now.ToString("HH:mm:ss"));
+                                else outputString = string.Format("Clock: {0}", DateTime.Now.ToString("HH:mm"));
                             }
                             if (ShowBarTimer)
                             {
-
                                 TimeSpan barTimeLeft = Bars.GetTime(Bars.Count - 1).Subtract(Now);
-
                                 outputString = string.Format("Bar timer: {0}{1}", (barTimeLeft.Ticks < 0
                                     ? "00:00:00"
                                     : barTimeLeft.Hours.ToString("00") + ":" + barTimeLeft.Minutes.ToString("00") + ":" + barTimeLeft.Seconds.ToString("00")), ShowClock ? "\n" + outputString : "");
-
                             }
 
                             writeText(outputString);
