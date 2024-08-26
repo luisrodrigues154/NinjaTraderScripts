@@ -140,8 +140,8 @@ namespace NinjaTrader.NinjaScript.Indicators
                             string outputString = "";
                             if (ShowClock)
                             {
-                                if (ShowClockSeconds) outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm:ss"));
-                                else outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm:ss"));
+                                if (ShowClockSeconds) outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm:ss"));
+                                else outputString = string.Format("Clock: {0}", TimeZoneInfo.ConvertTime(DateTime.Now, TimeZoneInfo.Local, ninjaTraderTimeZone).ToString("HH:mm"));
                             }
                             if (ShowBarTimer)
                             {
