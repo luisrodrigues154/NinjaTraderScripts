@@ -62,6 +62,18 @@ All the elements, if they require time context, consider NewYork timezone as the
      - Toggle Clock
      - Toggle Clock seconds
 
+### Drawing tools
+
+1. [TradePlacer](https://github.com/luisrodrigues154/NinjaTraderScripts/blob/master/drawing_tools/TradePlacer.cs)
+   - TradingView-like visual representation of trades with Stop loss and Take profit shaded areas
+   - TODO: placing orders based on this drawing tool
+   - Allows To:
+     - Define base RR to when initially drawing
+     - Toggle Risk:Reward calculation
+     - Toggle cost calculation
+     - Toggle points made calculation
+     - Change Entry, SL and TP settings
+
 ### Maybe next
 
 These are elements that i might do later, because they seem to add quality of life, but not made until now due to not being extremelly necessary
