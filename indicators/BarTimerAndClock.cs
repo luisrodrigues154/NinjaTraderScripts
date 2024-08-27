@@ -144,7 +144,7 @@ namespace NinjaTrader.NinjaScript.Indicators
                                 DateTime timeOffset = TimeZoneInfo.ConvertTime(DateTime.UtcNow, ninjaTraderTimeZone);
                                 timeOffset = ninjaTraderTimeZone.IsDaylightSavingTime(timeOffset) ? timeOffset + new TimeSpan(01, 00, 00) : timeOffset;
                                 if (ShowClockSeconds) outputString = string.Format("Clock: {0}", timeOffset.ToString("HH:mm:ss"));
-                                else outputString = string.Format("Clock: {0}", timeOffset..ToString("HH:mm"));
+                                else outputString = string.Format("Clock: {0}", timeOffset.ToString("HH:mm"));
                             }
 
                             writeText(outputString);
