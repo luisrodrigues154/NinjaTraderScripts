@@ -35,6 +35,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
         private double ratio = 2;
         private double risk;
         private double reward;
+        private double calculatedRR;
         private double stopPrice;
         private double targetPrice;
         private double textleftPoint;
@@ -68,44 +69,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
                 Dispose();
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void SetReward()
-        {
 
-            if (Anchors == null || AttachedTo == null)
-                return;
-
-            entryPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(EntryAnchor.Price);
-            stopPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RiskAnchor.Price);
-            risk = entryPrice - stopPrice;
-            RewardAnchor.IsEditing = false;
-            needsRatioUpdate = false;
-            if (!setInitialReward)
-            {
-                reward = risk * InitialRR;
-                targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(entryPrice + reward);
-
-                RewardAnchor.Price = targetPrice;
-                setInitialReward = true;
-            }
-
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void SetRisk()
-        {
-
-            if (Anchors == null || AttachedTo == null)
-                return;
-
-            entryPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(EntryAnchor.Price);
-            targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RewardAnchor.Price);
-
-            reward = targetPrice - entryPrice;
-            RiskAnchor.IsEditing = false;
-            needsRatioUpdate = false;
-            return;
-        }
 
         private void DrawShadedAreas(ChartPanel chartPanel, ChartControl chartControl, ChartScale chartScale)
         {
@@ -159,6 +123,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
             if (!IsUserDrawn)
                 price = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(anchor.Price);
 
+            updateBaseData(false);
             priceString = GetPriceString(price, chartBars);
 
             Stroke color;
@@ -251,8 +216,8 @@ namespace NinjaTrader.NinjaScript.DrawingTools
 
             if (ShowRR && yValueEntry == price)
             {
-                if (risk != 0 && reward != 0)
-                    priceString = string.Format("{0} (RR: {1})", priceString, Math.Round(reward / risk, 2));
+                if (calculatedRR != -1)
+                    priceString = string.Format("{0} (RR: {1})", priceString, calculatedRR);
                 else
                     priceString = priceString + "(RR: INF)";
             }
@@ -391,36 +356,76 @@ namespace NinjaTrader.NinjaScript.DrawingTools
                 }
         }
 
+        private void updateBaseData(bool fromRiskToInitial)
+        {
+            if (Anchors == null || AttachedTo == null) return;
+
+            entryPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(EntryAnchor.Price);
+            stopPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RiskAnchor.Price);
+            targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RewardAnchor.Price);
+
+            // risk anchor
+            if (fromRiskToInitial && !setInitialReward)
+            {
+                reward = (entryPrice - stopPrice) * InitialRR;
+                targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(entryPrice + reward);
+                RewardAnchor.Price = targetPrice;
+                setInitialReward = false;
+                RewardAnchor.IsEditing = false;
+            }
+            else
+            {
+                risk = Math.Abs(entryPrice - stopPrice);
+                reward = Math.Abs(entryPrice - targetPrice);
+                try
+                {
+                    calculatedRR = reward / risk;
+                    calculatedRR = Math.Round(calculatedRR, 2);
+                }
+                catch (Exception)
+                {
+                    calculatedRR = -1;
+                }
+            }
+        }
+
         public override void OnMouseDown(ChartControl chartControl, ChartPanel chartPanel, ChartScale chartScale, ChartAnchor dataPoint)
         {
             switch (DrawingState)
             {
                 case DrawingState.Building:
+
                     if (EntryAnchor.IsEditing)
                     {
                         dataPoint.CopyDataValues(EntryAnchor);
                         dataPoint.CopyDataValues(RiskAnchor);
+                        dataPoint.CopyDataValues(RewardAnchor);
                         EntryAnchor.IsEditing = false;
                         entryPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(EntryAnchor.Price);
+                        updateBaseData(false);
                     }
                     else if (RiskAnchor.IsEditing)
                     {
                         dataPoint.CopyDataValues(RiskAnchor);
                         RiskAnchor.IsEditing = false;
                         stopPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RiskAnchor.Price);
-                        SetReward();
-                        // we set the anchor for the target after stop mouse down event via SetReward()
-                        //however we need make sure Time is in view when builiding, but always when SetRreward is used..
-                        RewardAnchor.Time = EntryAnchor.Time;
-                        RewardAnchor.SlotIndex = EntryAnchor.SlotIndex;
-                        RewardAnchor.IsEditing = false;
+                        updateBaseData(true);
                     }
-                    // if the anchors are no longer being edited, set the drawing state to normal and unselect the object
+                    else if (RewardAnchor.IsEditing)
+                    {
+                        dataPoint.CopyDataValues(RewardAnchor);
+                        RewardAnchor.IsEditing = false;
+                        targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RewardAnchor.Price);
+                        updateBaseData(false);
+                    }
+
                     if (!EntryAnchor.IsEditing && !RiskAnchor.IsEditing && !RewardAnchor.IsEditing)
                     {
                         DrawingState = DrawingState.Normal;
                         IsSelected = false;
-                    }
+                    };
+                    // if the anchors are no longer being edited, set the drawing state to normal and unselect the object
+
                     break;
                 case DrawingState.Normal:
                     Point point = dataPoint.GetPoint(chartControl, chartPanel, chartScale);
@@ -457,13 +462,11 @@ namespace NinjaTrader.NinjaScript.DrawingTools
             else if (DrawingState == DrawingState.Editing && editingAnchor != null)
             {
                 dataPoint.CopyDataValues(editingAnchor);
-                if (editingAnchor != EntryAnchor)
-                {
-                    if (editingAnchor != RewardAnchor && InitialRR.ApproxCompare(0) != 0)
-                        SetReward();
-                    else if (InitialRR.ApproxCompare(0) != 0)
-                        SetRisk();
-                }
+                entryPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(EntryAnchor.Price);
+                stopPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RiskAnchor.Price);
+                targetPrice = AttachedTo.Instrument.MasterInstrument.RoundToTickSize(RewardAnchor.Price);
+                updateBaseData(false);
+
             }
             else if (DrawingState == DrawingState.Moving)
             {
@@ -487,12 +490,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
                 DrawingState = DrawingState.Normal;
             if (editingAnchor != null)
             {
-                if (editingAnchor == EntryAnchor)
-                {
-                    SetReward();
-                    if (InitialRR.ApproxCompare(0) != 0)
-                        SetRisk();
-                }
+                updateBaseData(false);
                 editingAnchor.IsEditing = false;
             }
             editingAnchor = null;
@@ -507,7 +505,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
 
             // this will be true right away to fix a restoral issue, so check if we really want to set reward
             if (needsRatioUpdate && DrawTarget)
-                SetReward();
+                updateBaseData(false);
 
             ChartPanel chartPanel = chartControl.ChartPanels[PanelIndex];
             Point entryPoint = EntryAnchor.GetPoint(chartControl, chartPanel, chartScale);
@@ -534,6 +532,7 @@ namespace NinjaTrader.NinjaScript.DrawingTools
 
             // don't try and draw the target stuff until we have calculated the target
             SharpDX.Direct2D1.Brush tmpBrush = IsInHitTest ? chartControl.SelectionBrush : AnchorLineStroke.BrushDX;
+
             if (DrawTarget)
             {
                 AnchorLineStroke.RenderTarget = RenderTarget;
